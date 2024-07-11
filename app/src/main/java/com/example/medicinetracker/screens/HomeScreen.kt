@@ -18,7 +18,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,17 +29,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.medicinetracker.components.NormalTextComponent
-import com.example.medicinetracker.components.collectAsStateLifecycleAware
-import com.example.medicinetracker.model.ProblemEntity
-import com.example.medicinetracker.ui.theme.AccentColor
-import com.example.medicinetracker.ui.theme.WhiteColor
-import com.example.medicinetracker.vm.HomeViewModel
 import com.example.medicinetracker.common.ApiStatus.ERROR
 import com.example.medicinetracker.common.ApiStatus.IDLE
 import com.example.medicinetracker.common.ApiStatus.LOADING
 import com.example.medicinetracker.common.ApiStatus.SUCCESS
+import com.example.medicinetracker.components.NormalTextComponent
+import com.example.medicinetracker.components.collectAsStateLifecycleAware
 import com.example.medicinetracker.model.MedicationEntity
+import com.example.medicinetracker.model.ProblemEntity
+import com.example.medicinetracker.ui.theme.AccentColor
+import com.example.medicinetracker.ui.theme.WhiteColor
+import com.example.medicinetracker.vm.HomeViewModel
+import org.koin.androidx.compose.koinViewModel
 import java.util.Calendar
 
 
@@ -49,7 +49,7 @@ import java.util.Calendar
 fun HomeScreen(
     navController: NavHostController,
     email: String?,
-    vm: HomeViewModel,
+    vm: HomeViewModel = koinViewModel(),
 ) {
 
     Surface(

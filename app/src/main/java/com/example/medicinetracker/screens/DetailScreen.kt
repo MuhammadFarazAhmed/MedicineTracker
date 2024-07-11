@@ -13,10 +13,12 @@ import com.example.medicinetracker.model.MedicationEntity
 import com.example.medicinetracker.model.ProblemEntity
 import com.example.medicinetracker.ui.theme.WhiteColor
 import com.example.medicinetracker.vm.HomeViewModel
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun DetailScreen(vm: HomeViewModel) {
+fun DetailScreen(vm: HomeViewModel = koinViewModel()) {
+
     Surface(
         color = WhiteColor,
         modifier = Modifier
