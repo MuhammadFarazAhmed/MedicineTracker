@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshState
@@ -28,7 +29,9 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import com.example.medicinetracker.common.ApiStatus.ERROR
 import com.example.medicinetracker.common.ApiStatus.IDLE
 import com.example.medicinetracker.common.ApiStatus.LOADING
@@ -44,11 +47,30 @@ import org.koin.androidx.compose.koinViewModel
 import java.util.Calendar
 
 
+fun NavGraphBuilder.homeNavGraph(
+    navigateToDetail: () -> Unit,
+    navigateToAuth: () -> Unit,
+) {
+    navigation(startDestination = "home/{email}", route = "homeGraph") {
+
+        composable(route = "home/{email}") { backStackEntry ->
+            HomeScreen(email = backStackEntry.arguments?.getString("email"),
+                navigateToDetail = navigateToDetail,
+                navigateToAuth = navigateToAuth)
+        }
+
+        composable(route = "detail") {
+            DetailScreen()
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
-    navController: NavHostController,
     email: String?,
+    navigateToDetail: () -> Unit,
+    navigateToAuth: () -> Unit,
     vm: HomeViewModel = koinViewModel(),
 ) {
 
@@ -68,11 +90,15 @@ fun HomeScreen(
 
             HeaderComposable(email)
 
+            Button(onClick = { navigateToAuth() }) {
+                Text(text = "Sign Out", color = WhiteColor)
+            }
+
             when (vm.status.value) {
                 IDLE -> {}
                 SUCCESS -> {
                     vm.isRefreshing.value = false
-                    SuccessComposable(problems, pullRefreshState, navController, vm)
+                    SuccessComposable(problems, pullRefreshState,navigateToDetail, vm)
                 }
 
                 ERROR -> {
@@ -85,9 +111,7 @@ fun HomeScreen(
                     LoadingComposable()
                 }
             }
-
         }
-
     }
 }
 
@@ -108,7 +132,7 @@ fun LoadingComposable() {
 fun SuccessComposable(
     problems: List<ProblemEntity>,
     pullRefreshState: PullRefreshState,
-    navController: NavHostController,
+    navigateToDetail: () -> Unit,
     vm: HomeViewModel
 ) {
     Box(
@@ -121,7 +145,7 @@ fun SuccessComposable(
             items(problems) { problem ->
                 ProblemListItem(problem) {
                     vm.currentItem = problem
-                    navController.navigate("detail")
+                    navigateToDetail()
                 }
             }
         }

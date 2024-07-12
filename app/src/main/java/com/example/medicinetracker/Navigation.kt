@@ -1,30 +1,33 @@
 package com.example.medicinetracker
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.example.medicinetracker.screens.DetailScreen
-import com.example.medicinetracker.screens.HomeScreen
-import com.example.medicinetracker.screens.LoginScreen
+import com.example.medicinetracker.screens.homeNavGraph
+import com.example.medicinetracker.screens.loginGraph
 
 @Composable
-fun Navigation() {
-    val navController = rememberNavController()
-
+fun MedicineNavHost(
+    navController: NavHostController,
+    onNavigateToDestination: (String, String?) -> Unit
+) {
     NavHost(
         navController = navController,
-        startDestination = "Login"
+        startDestination = "login",
+        route = "auth"
     ) {
-        composable(route = "login") {
-            LoginScreen(navController)
-        }
-        composable(route = "welcome/{email}") { backStackEntry ->
-            HomeScreen(navController, email = backStackEntry.arguments?.getString("email"))
-        }
 
-        composable(route = "detail") {
-            DetailScreen()
-        }
+        loginGraph(
+            navigateToHome = { email ->
+                onNavigateToDestination("homeGraph", "home/$email")
+            })
+
+        homeNavGraph(
+            navigateToAuth = {
+                onNavigateToDestination("auth", "login")
+            }, navigateToDetail = {
+                onNavigateToDestination("homeGraph", "detail")
+            })
+
     }
 }

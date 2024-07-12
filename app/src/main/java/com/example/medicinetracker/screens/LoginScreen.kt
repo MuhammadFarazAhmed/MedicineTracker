@@ -19,17 +19,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
 import com.example.medicinetracker.components.BottomComponent
 import com.example.medicinetracker.components.HeadingTextComponent
 import com.example.medicinetracker.components.MyTextFieldComponent
 import com.example.medicinetracker.components.NormalTextComponent
 import com.example.medicinetracker.components.PasswordTextFieldComponent
 import com.example.medicinetracker.vm.LoginViewModel
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
+
+fun NavGraphBuilder.loginGraph(
+    navigateToHome: (email: String) -> Unit
+) {
+    composable(route = "login") {
+        LoginScreen(navigateToHome = navigateToHome)
+    }
+}
 
 @Composable
-fun LoginScreen(navController: NavHostController, vm: LoginViewModel = getViewModel()) {
+fun LoginScreen(
+    vm: LoginViewModel = koinViewModel(),
+    navigateToHome: (email: String) -> Unit
+) {
 
     val context = LocalContext.current
 
@@ -67,7 +79,7 @@ fun LoginScreen(navController: NavHostController, vm: LoginViewModel = getViewMo
                 action = "Login",
                 onClick = {
                     if (vm.validate())
-                        navController.navigate("welcome/${vm.email.value}")
+                        navigateToHome(vm.email.value)
                     else Toast.makeText(
                         context,
                         "Please Provide Valid Credentials",
@@ -82,11 +94,11 @@ fun LoginScreen(navController: NavHostController, vm: LoginViewModel = getViewMo
 
 @Composable
 @Preview
-fun LoginScreenPreview(){
-    val email  = remember {
+fun LoginScreenPreview() {
+    val email = remember {
         mutableStateOf("")
     }
-    val password  = remember {
+    val password = remember {
         mutableStateOf("")
     }
     Surface(
