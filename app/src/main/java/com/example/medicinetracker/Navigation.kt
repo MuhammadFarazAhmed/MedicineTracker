@@ -6,25 +6,30 @@ import androidx.navigation.compose.NavHost
 import com.example.medicinetracker.screens.homeNavGraph
 import com.example.medicinetracker.screens.loginGraph
 
+
 @Composable
 fun MedicineNavHost(
     navController: NavHostController,
-    onNavigateToDestination: (String, String?) -> Unit
+    onNavigateToDestination: (String, String?) -> Unit,
+    isLogin: Boolean
 ) {
     NavHost(
         navController = navController,
-        startDestination = "login",
-        route = "auth"
+        startDestination = if(isLogin) "homeGraph" else "authGraph",
     ) {
 
         loginGraph(
             navigateToHome = { email ->
-                onNavigateToDestination("homeGraph", "home/$email")
+                navController.navigate("home/$email"){
+                    popUpTo("authGraph")
+                }
             })
 
         homeNavGraph(
             navigateToAuth = {
-                onNavigateToDestination("auth", "login")
+                navController.navigate("authGraph"){
+                    popUpTo("homeGraph")
+                }
             }, navigateToDetail = {
                 onNavigateToDestination("homeGraph", "detail")
             })

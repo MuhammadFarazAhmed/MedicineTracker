@@ -38,7 +38,8 @@ fun App(appState: AppState = rememberAppState()) {
 
                 MedicineNavHost(
                     navController = appState.navController,
-                    onNavigateToDestination = appState::navigate
+                    onNavigateToDestination = appState::navigate,
+                    isLogin = appState.isLogin
                 )
             }
 

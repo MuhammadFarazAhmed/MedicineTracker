@@ -62,6 +62,7 @@ koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-android-compat = { module = "io.insert-koin:koin-android-compat", version.ref = "koin" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
+koin_androidx_navigation = { module = "io.insert-koin:koin-androidx-navigation", version.ref = "koin" }
 
 # Room Libraries
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }

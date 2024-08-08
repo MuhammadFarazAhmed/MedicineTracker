@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import com.example.medicinetracker.components.BottomComponent
 import com.example.medicinetracker.components.HeadingTextComponent
 import com.example.medicinetracker.components.MyTextFieldComponent
@@ -32,8 +33,13 @@ import org.koin.androidx.compose.koinViewModel
 fun NavGraphBuilder.loginGraph(
     navigateToHome: (email: String) -> Unit
 ) {
-    composable(route = "login") {
-        LoginScreen(navigateToHome = navigateToHome)
+    navigation(
+        startDestination = "login",
+        route = "authGraph"
+    ) {
+        composable(route = "login") {
+            LoginScreen(navigateToHome = navigateToHome)
+        }
     }
 }
 

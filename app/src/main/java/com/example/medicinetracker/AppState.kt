@@ -18,6 +18,8 @@ fun rememberAppState(navController: NavHostController = rememberNavController())
 @Stable
 class AppState(val navController: NavHostController) {
 
+    val isLogin: Boolean
+        @Composable get() = false
 
     val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
@@ -27,17 +29,6 @@ class AppState(val navController: NavHostController) {
         destination: String,
         route: String? = null,
     ) {
-        if (destination == "homeGraph" && route?.substringBefore('/') == "home") {
-            navController.navigate(
-                route
-            ) {
-                popUpTo(navController.graph.startDestinationId) {
-                    inclusive = true
-                }
-                launchSingleTop = true
-            }
-        } else {
-            navController.navigate(route ?: destination)
-        }
+        navController.navigate(route ?: destination)
     }
 }
